@@ -30,23 +30,41 @@ export const useDeviceOrientation = (isEnabled: boolean) => {
     if (!isEnabled || permissionGranted === false) return;
 
     const handleOrientation = (event: DeviceOrientationEvent) => {
-      // beta is the front-to-back tilt in degrees, where 0 is flat on a table
-      // When vertical (on forehead), beta is usually around 90.
-      const beta = event.beta; 
-      
-      if (beta === null) return;
+      const { beta, gamma } = event;
+      if (beta === null || gamma === null) return;
 
-      // SPEC:
-      // Neutral: Vertical (~90)
-      // Correct (Tilt Forward): ~45 (shifted downward)
-      // Pass (Tilt Backward): ~135 (shifted upward)
+      const isLandscape = typeof window !== "undefined" && 
+                          window.innerWidth > window.innerHeight;
+
+      // In Portrait: beta is pitch (tilt forward/backward)
+      // In Landscape: gamma is often the tilt axis when held sideways
+      const tiltValue = isLandscape ? gamma : beta;
+
+      // Adjusted thresholds for landscape vs portrait
+      // When landscape, gamma ranges from -90 to 90
+      // When portrait, beta ranges from -180 to 180
       
-      if (beta < 50) {
-        setTiltState("correct");
-      } else if (beta > 130) {
-        setTiltState("pass");
+      if (isLandscape) {
+        // Landscape logic (device on forehead)
+        // Gamma ~ 0 is vertical
+        // Gamma > 40 is tilt down (correct)
+        // Gamma < -40 is tilt up (pass)
+        if (gamma > 40) {
+          setTiltState("correct");
+        } else if (gamma < -40) {
+          setTiltState("pass");
+        } else {
+          setTiltState("neutral");
+        }
       } else {
-        setTiltState("neutral");
+        // Portrait logic
+        if (beta < 50) {
+          setTiltState("correct");
+        } else if (beta > 130) {
+          setTiltState("pass");
+        } else {
+          setTiltState("neutral");
+        }
       }
     };
 

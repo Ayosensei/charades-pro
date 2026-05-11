@@ -144,7 +144,7 @@ export const GameInterface: React.FC<GameInterfaceProps> = ({ category }) => {
       </div>
 
       {/* Main Word Card Area */}
-      <div className="flex-1 flex items-center justify-center p-6 relative">
+      <div className="flex-1 flex items-center justify-center p-4 md:p-6 relative min-h-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentWord}
@@ -152,9 +152,9 @@ export const GameInterface: React.FC<GameInterfaceProps> = ({ category }) => {
             animate={{ scale: 1, opacity: 1, rotateX: 0 }}
             exit={{ scale: 1.2, opacity: 0, rotateX: -45 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="w-full max-w-2xl h-64 md:h-96 glass rounded-[3rem] flex items-center justify-center text-center p-8 shadow-2xl relative z-10"
+            className="w-full max-w-2xl h-full max-h-[60vh] md:max-h-[50vh] glass rounded-[2rem] md:rounded-[3rem] flex items-center justify-center text-center p-4 md:p-8 shadow-2xl relative z-10"
           >
-            <h2 className="text-4xl md:text-7xl font-black tracking-tight uppercase">
+            <h2 className="text-3xl sm:text-4xl md:text-7xl font-black tracking-tight uppercase break-words px-4">
               {currentWord}
             </h2>
           </motion.div>
@@ -203,7 +203,7 @@ export const GameInterface: React.FC<GameInterfaceProps> = ({ category }) => {
       </div>
 
       {/* Footer Instructions */}
-      <div className="p-12 text-center text-slate-500 text-sm">
+      <div className="p-4 md:p-12 text-center text-slate-500 text-sm">
         <p className="opacity-50">Tilt Down for CORRECT • Tilt Up to PASS</p>
       </div>
     </div>
