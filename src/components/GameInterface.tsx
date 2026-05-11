@@ -122,9 +122,11 @@ export const GameInterface: React.FC<GameInterfaceProps> = ({ category }) => {
 
   return (
     <div className={cn(
-      "fixed inset-0 flex flex-col text-white overflow-hidden select-none transition-colors duration-300",
+      "fixed inset-0 flex flex-col text-white overflow-hidden select-none transition-colors duration-500",
       getBgColor()
     )}>
+      {/* Premium Background Glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,92,246,0.05),transparent)] pointer-events-none" />
       {/* HUD */}
       <div className="flex items-center justify-between p-6 z-10">
         <Link href="/" className="p-2 glass rounded-xl">

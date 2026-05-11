@@ -47,20 +47,20 @@ export const useDeviceOrientation = (isEnabled: boolean) => {
       if (isLandscape) {
         // Landscape logic (device on forehead)
         // Gamma ~ 0 is vertical
-        // Gamma > 40 is tilt down (correct)
-        // Gamma < -40 is tilt up (pass)
-        if (gamma > 40) {
+        // Increase threshold to 55 degrees to prevent accidental triggers
+        if (gamma > 55) {
           setTiltState("correct");
-        } else if (gamma < -40) {
+        } else if (gamma < -55) {
           setTiltState("pass");
         } else {
           setTiltState("neutral");
         }
       } else {
         // Portrait logic
-        if (beta < 50) {
+        // Increase thresholds to be more deliberate (Vertical is ~90)
+        if (beta < 35) { // Was 50
           setTiltState("correct");
-        } else if (beta > 130) {
+        } else if (beta > 145) { // Was 130
           setTiltState("pass");
         } else {
           setTiltState("neutral");
