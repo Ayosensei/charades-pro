@@ -35,7 +35,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-lg text-slate-400 max-w-2xl mx-auto"
+          className="text-lg text-slate-300 max-w-2xl mx-auto"
         >
           The ultimate ad-free charades experience. 18 categories, tilt-to-score mechanics, and zero distractions.
         </motion.p>
@@ -64,13 +64,17 @@ export default function Home() {
       </section>
 
       {/* Footer Info */}
-      <footer className="max-w-4xl mx-auto mt-24 pb-12 text-center text-slate-500 text-sm">
+      <footer className="max-w-4xl mx-auto mt-24 pb-12 text-center text-slate-300 text-sm">
         <p>Built for the best party experience. Ad-free & Privacy-First.</p>
         <div className="mt-4 flex justify-center gap-6">
-          <button onClick={() => setShowHowTo(true)} className="hover:text-slate-300 transition-colors flex items-center gap-1">
+          <button 
+            onClick={() => setShowHowTo(true)} 
+            className="hover:text-white transition-colors flex items-center gap-1"
+            aria-label="How to play instructions"
+          >
             <Info className="w-4 h-4" /> How to Play
           </button>
-          <span className="hover:text-slate-300 transition-colors cursor-default">v1.0.0</span>
+          <span className="hover:text-slate-100 transition-colors cursor-default">v1.0.0</span>
         </div>
       </footer>
 
@@ -82,16 +86,20 @@ export default function Home() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="modal-title"
               className="w-full max-w-lg glass-dark rounded-[2.5rem] p-8 relative border border-white/10"
             >
               <button 
                 onClick={() => setShowHowTo(false)}
                 className="absolute top-6 right-6 p-2 glass rounded-full hover:bg-white/10 transition-colors"
+                aria-label="Close modal"
               >
                 <X className="w-5 h-5" />
               </button>
 
-              <h2 className="text-3xl font-black text-white mb-8">How to Play</h2>
+              <h2 id="modal-title" className="text-3xl font-black text-white mb-8">How to Play</h2>
               
               <div className="space-y-6">
                 <div className="flex gap-4">

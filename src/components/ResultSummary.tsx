@@ -24,11 +24,11 @@ export const ResultSummary: React.FC<ResultSummaryProps> = ({
         animate={{ y: 0, opacity: 1 }}
         className="text-center mb-12"
       >
-        <h2 className="text-slate-400 uppercase tracking-widest text-sm font-bold mb-2">Game Over</h2>
+        <h2 className="text-slate-300 uppercase tracking-widest text-sm font-bold mb-2">Game Over</h2>
         <div className="text-7xl font-black text-white mb-4">
-          {score} <span className="text-2xl text-slate-500">Points</span>
+          {score} <span className="text-2xl text-slate-300">Points</span>
         </div>
-        <p className="text-slate-400">Great effort! Check your results below.</p>
+        <p className="text-slate-200">Great effort! Check your results below.</p>
       </motion.div>
 
       <div className="w-full glass rounded-3xl overflow-hidden mb-8">
@@ -50,7 +50,7 @@ export const ResultSummary: React.FC<ResultSummaryProps> = ({
             </motion.div>
           ))}
           {results.length === 0 && (
-            <div className="text-center py-8 text-slate-500">No words played</div>
+            <div className="text-center py-8 text-slate-300">No words played</div>
           )}
         </div>
       </div>

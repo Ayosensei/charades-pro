@@ -121,7 +121,7 @@ export const GameInterface: React.FC<GameInterfaceProps> = ({ category }) => {
   };
 
   return (
-    <div className={cn(
+    <main className={cn(
       "fixed inset-0 flex flex-col text-white overflow-hidden select-none transition-colors duration-500",
       getBgColor()
     )}>
@@ -129,7 +129,7 @@ export const GameInterface: React.FC<GameInterfaceProps> = ({ category }) => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,92,246,0.05),transparent)] pointer-events-none" />
       {/* HUD */}
       <div className="flex items-center justify-between p-6 z-10">
-        <Link href="/" className="p-2 glass rounded-xl">
+        <Link href="/" className="p-2 glass rounded-xl" aria-label="Go back to home">
           <ChevronLeft className="w-6 h-6" />
         </Link>
         
@@ -205,9 +205,9 @@ export const GameInterface: React.FC<GameInterfaceProps> = ({ category }) => {
       </div>
 
       {/* Footer Instructions */}
-      <div className="p-4 md:p-12 text-center text-slate-500 text-sm">
-        <p className="opacity-50">Tilt Down for CORRECT • Tilt Up to PASS</p>
+      <div className="p-4 md:p-12 text-center text-slate-300 text-sm">
+        <p className="opacity-70">Tilt Down for CORRECT • Tilt Up to PASS</p>
       </div>
-    </div>
+    </main>
   );
 };
