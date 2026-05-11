@@ -1,13 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Category } from "@/data/categories";
 import { useGameLogic } from "@/hooks/useGameLogic";
+import { useDeviceOrientation } from "@/hooks/useDeviceOrientation";
 import { Countdown } from "./Countdown";
 import { ResultSummary } from "./ResultSummary";
-import { Timer, Trophy, ChevronLeft } from "lucide-react";
+import { Timer, Trophy, ChevronLeft, Smartphone } from "lucide-react";
 import Link from "next/link";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 interface GameInterfaceProps {
   category: Category;
@@ -26,6 +33,73 @@ export const GameInterface: React.FC<GameInterfaceProps> = ({ category }) => {
     setGameState,
   } = useGameLogic(category);
 
+  const { tiltState, requestPermission, permissionGranted } = useDeviceOrientation(gameState === "playing");
+  
+  // To prevent multiple triggers for a single tilt
+  const isTiltLocked = useRef(false);
+  const [needsPermission, setNeedsPermission] = useState(true);
+
+  // Sync tilt to game logic
+  useEffect(() => {
+    if (gameState !== "playing" || isTiltLocked.current) return;
+
+    if (tiltState === "correct") {
+      handleCorrect();
+      triggerHaptic(100);
+      isTiltLocked.current = true;
+      setTimeout(() => { isTiltLocked.current = false; }, 1000);
+    } else if (tiltState === "pass") {
+      handlePass();
+      triggerHaptic([50, 50]);
+      isTiltLocked.current = true;
+      setTimeout(() => { isTiltLocked.current = false; }, 1000);
+    }
+  }, [tiltState, gameState, handleCorrect, handlePass]);
+
+  const triggerHaptic = (pattern: number | number[]) => {
+    if (typeof navigator !== "undefined" && navigator.vibrate) {
+      navigator.vibrate(pattern);
+    }
+  };
+
+  const handleStartRequest = async () => {
+    const granted = await requestPermission();
+    if (granted) {
+      setNeedsPermission(false);
+    } else {
+      // Fallback to tap mode if denied or not supported
+      setNeedsPermission(false);
+    }
+  };
+
+  if (needsPermission && gameState === "countdown") {
+    return (
+      <div className="fixed inset-0 flex flex-col items-center justify-center p-6 text-center bg-background">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="max-w-xs space-y-8"
+        >
+          <div className="w-24 h-24 mx-auto glass rounded-3xl flex items-center justify-center">
+            <Smartphone className="w-12 h-12 text-brand-accent" />
+          </div>
+          <div className="space-y-4">
+            <h2 className="text-3xl font-black text-white">Ready?</h2>
+            <p className="text-slate-400">
+              Place the phone on your forehead after tapping start. Tilt forward for <b>Correct</b>, backward to <b>Pass</b>.
+            </p>
+          </div>
+          <button
+            onClick={handleStartRequest}
+            className="w-full py-4 px-8 rounded-2xl bg-white text-background font-bold text-lg hover:scale-105 transition-transform"
+          >
+            Start Game
+          </button>
+        </motion.div>
+      </div>
+    );
+  }
+
   if (gameState === "countdown") {
     return <Countdown onComplete={startGame} />;
   }
@@ -40,8 +114,17 @@ export const GameInterface: React.FC<GameInterfaceProps> = ({ category }) => {
     );
   }
 
+  const getBgColor = () => {
+    if (tiltState === "correct") return "bg-correct";
+    if (tiltState === "pass") return "bg-pass";
+    return "bg-background";
+  };
+
   return (
-    <div className="fixed inset-0 flex flex-col bg-background text-white overflow-hidden select-none">
+    <div className={cn(
+      "fixed inset-0 flex flex-col text-white overflow-hidden select-none transition-colors duration-300",
+      getBgColor()
+    )}>
       {/* HUD */}
       <div className="flex items-center justify-between p-6 z-10">
         <Link href="/" className="p-2 glass rounded-xl">
@@ -65,9 +148,9 @@ export const GameInterface: React.FC<GameInterfaceProps> = ({ category }) => {
         <AnimatePresence mode="wait">
           <motion.div
             key={currentWord}
-            initial={{ scale: 0.8, opacity: 0, rotateY: 90 }}
-            animate={{ scale: 1, opacity: 1, rotateY: 0 }}
-            exit={{ scale: 1.2, opacity: 0, rotateY: -90 }}
+            initial={{ scale: 0.8, opacity: 0, rotateX: 45 }}
+            animate={{ scale: 1, opacity: 1, rotateX: 0 }}
+            exit={{ scale: 1.2, opacity: 0, rotateX: -45 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className="w-full max-w-2xl h-64 md:h-96 glass rounded-[3rem] flex items-center justify-center text-center p-8 shadow-2xl relative z-10"
           >
@@ -77,26 +160,51 @@ export const GameInterface: React.FC<GameInterfaceProps> = ({ category }) => {
           </motion.div>
         </AnimatePresence>
 
-        {/* Tap Targets (Hidden but functional) */}
+        {/* Tap Targets (Hidden but functional as fallback) */}
         <div className="absolute inset-0 flex z-0">
           <div 
-            onClick={handlePass}
-            className="flex-1 flex items-end justify-center pb-12 hover:bg-pass/10 transition-colors cursor-pointer group"
-          >
-            <span className="text-pass opacity-0 group-hover:opacity-100 transition-opacity font-bold tracking-widest uppercase">Pass</span>
-          </div>
+            onClick={() => {
+              if (isTiltLocked.current) return;
+              handlePass();
+              triggerHaptic([50, 50]);
+              isTiltLocked.current = true;
+              setTimeout(() => { isTiltLocked.current = false; }, 500);
+            }}
+            className="flex-1 cursor-pointer"
+          />
           <div 
-            onClick={handleCorrect}
-            className="flex-1 flex items-end justify-center pb-12 hover:bg-correct/10 transition-colors cursor-pointer group"
-          >
-            <span className="text-correct opacity-0 group-hover:opacity-100 transition-opacity font-bold tracking-widest uppercase">Correct</span>
-          </div>
+            onClick={() => {
+              if (isTiltLocked.current) return;
+              handleCorrect();
+              triggerHaptic(100);
+              isTiltLocked.current = true;
+              setTimeout(() => { isTiltLocked.current = false; }, 500);
+            }}
+            className="flex-1 cursor-pointer"
+          />
         </div>
+      </div>
+
+      {/* Visual Tilt Feedback Overlays */}
+      <div className={cn(
+        "absolute inset-0 pointer-events-none transition-opacity duration-300",
+        tiltState === "correct" ? "opacity-100" : "opacity-0"
+      )}>
+        <div className="absolute inset-0 bg-correct/20" />
+        <div className="absolute bottom-12 w-full text-center text-white text-4xl font-black uppercase tracking-widest">Correct!</div>
+      </div>
+      
+      <div className={cn(
+        "absolute inset-0 pointer-events-none transition-opacity duration-300",
+        tiltState === "pass" ? "opacity-100" : "opacity-0"
+      )}>
+        <div className="absolute inset-0 bg-pass/20" />
+        <div className="absolute top-24 w-full text-center text-white text-4xl font-black uppercase tracking-widest">Pass</div>
       </div>
 
       {/* Footer Instructions */}
       <div className="p-12 text-center text-slate-500 text-sm">
-        <p className="animate-pulse">Tap Left to PASS • Tap Right for CORRECT</p>
+        <p className="opacity-50">Tilt Down for CORRECT • Tilt Up to PASS</p>
       </div>
     </div>
   );
