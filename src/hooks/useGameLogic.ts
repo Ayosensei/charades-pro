@@ -18,9 +18,13 @@ export const useGameLogic = (category: Category, duration: number = 60) => {
   const [results, setResults] = useState<WordResult[]>([]);
   const [shuffledWords, setShuffledWords] = useState<string[]>([]);
 
-  // Shuffle words on start
+  // Shuffle words on start using Fisher-Yates algorithm
   useEffect(() => {
-    const shuffled = [...category.words].sort(() => Math.random() - 0.5);
+    const shuffled = [...category.words];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
     setShuffledWords(shuffled);
   }, [category]);
 
