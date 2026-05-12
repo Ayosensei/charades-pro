@@ -154,9 +154,9 @@ export const GameInterface: React.FC<GameInterfaceProps> = ({ category }) => {
             animate={{ scale: 1, opacity: 1, rotateX: 0 }}
             exit={{ scale: 1.2, opacity: 0, rotateX: -45 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="w-full max-w-2xl h-full max-h-[60vh] md:max-h-[50vh] glass rounded-[2rem] md:rounded-[3rem] flex items-center justify-center text-center p-4 md:p-8 shadow-2xl relative z-10"
+            className="w-full max-w-2xl h-full max-h-[60vh] md:max-h-[50vh] bg-white rounded-[2rem] md:rounded-[3rem] flex items-center justify-center text-center p-4 md:p-8 shadow-2xl relative z-10"
           >
-            <h2 className="text-3xl sm:text-4xl md:text-7xl font-black tracking-tight uppercase break-words px-4">
+            <h2 className="text-3xl sm:text-4xl md:text-7xl font-black tracking-tight uppercase break-words px-4 text-black">
               {currentWord}
             </h2>
           </motion.div>
@@ -189,19 +189,29 @@ export const GameInterface: React.FC<GameInterfaceProps> = ({ category }) => {
 
       {/* Visual Tilt Feedback Overlays */}
       <div className={cn(
-        "absolute inset-0 pointer-events-none transition-opacity duration-300",
+        "absolute inset-0 pointer-events-none transition-opacity duration-300 flex flex-col items-center justify-center",
         tiltState === "correct" ? "opacity-100" : "opacity-0"
       )}>
-        <div className="absolute inset-0 bg-correct/20" />
-        <div className="absolute bottom-12 w-full text-center text-white text-4xl font-black uppercase tracking-widest">Correct!</div>
+        <div className="absolute inset-0 bg-correct/10" />
+        <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center mb-8 z-10 shadow-2xl">
+          <svg className="w-12 h-12 text-correct" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div className="z-10 text-center text-white text-4xl font-black uppercase tracking-widest">Correct</div>
       </div>
       
       <div className={cn(
-        "absolute inset-0 pointer-events-none transition-opacity duration-300",
+        "absolute inset-0 pointer-events-none transition-opacity duration-300 flex flex-col items-center justify-center",
         tiltState === "pass" ? "opacity-100" : "opacity-0"
       )}>
-        <div className="absolute inset-0 bg-pass/20" />
-        <div className="absolute top-24 w-full text-center text-white text-4xl font-black uppercase tracking-widest">Pass</div>
+        <div className="absolute inset-0 bg-pass/10" />
+        <div className="w-24 h-24 rounded-full bg-pass-fg flex items-center justify-center mb-8 z-10 shadow-2xl">
+          <svg className="w-12 h-12 text-pass" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+        <div className="z-10 text-center text-pass-fg text-4xl font-black uppercase tracking-widest">Passed</div>
       </div>
 
       {/* Footer Instructions */}

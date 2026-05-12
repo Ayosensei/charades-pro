@@ -26,8 +26,8 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
         whileHover={{ scale: 1.05, translateY: -5 }}
         whileTap={{ scale: 0.95 }}
         className={cn(
-          "glass relative overflow-hidden group cursor-pointer p-6 rounded-3xl h-48 flex flex-col justify-between transition-all duration-300",
-          "hover:border-white/20 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+          "bg-neutral border border-white/5 relative overflow-hidden group cursor-pointer p-6 rounded-3xl h-48 flex flex-col justify-between transition-all duration-300",
+          "hover:border-white/20 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)]"
         )}
       >
         {/* Background Gradient Glow */}
