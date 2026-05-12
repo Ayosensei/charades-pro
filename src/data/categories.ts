@@ -61,7 +61,7 @@ export const categories: Category[] = [
     name: "Footballers",
     icon: "Trophy",
     color: "from-green-500 to-emerald-600",
-    words: ["Lionel Messi", "Cristiano Ronaldo", "Pele", "Diego Maradona", "Kylian Mbappe", "Neymar Jr", "Erling Haaland", "Zinedine Zidane", "Ronaldinho", "David Beckham", "Thierry Henry", "Mohamed Salah", "Harry Kane", "Bukayo Saka", "Vinicius Jr", "Andres Iniesta", "Xavi Hernandez", "Sergio Busquets", "Carles Puyol", "Gerard Pique", "Dani Alves", "Jordi Alba", "Victor Valdes", "Iker Casillas", "Sergio Ramos", "Pepe", "Marcelo", "Luka Modric", "Toni Kroos", "Casemiro", "Karim Benzema", "Gareth Bale", "Wayne Rooney", "Ryan Giggs", "Paul Scholes", "Roy Keane", "Rio Ferdinand", "Nemanja Vidic", "Gary Neville", "Patrice Evra", "Edwin van der Sar", "Steven Gerrard", "Frank Lampard", "John Terry", "Didier Drogba"],
+    words: ["Kylian Mbappe", "Erling Haaland", "Jude Bellingham", "Vinicius Jr", "Lamine Yamal", "Phil Foden", "Bukayo Saka", "Pedri", "Gavi", "Jamal Musiala", "Florian Wirtz", "Rodrygo", "Eduardo Camavinga", "Aurelien Tchouameni", "Cole Palmer", "Declan Rice", "Martin Odegaard", "Enzo Fernandez", "Julian Alvarez", "Alejandro Garnacho", "Rafael Leao", "Khvicha Kvaratskhelia", "Victor Osimhen", "Achraf Hakimi", "Alphonso Davies", "Trent Alexander-Arnold", "Reece James", "William Saliba", "Ronald Araujo", "Ruben Dias", "Josko Gvardiol", "Xavi Simons", "Warren Zaire-Emery", "Endrick", "Arda Guler", "Jeremy Doku", "Kobbie Mainoo", "Rico Lewis", "Joao Felix", "Darwin Nunez", "Marcus Rashford", "Bruno Fernandes", "Bernardo Silva", "Kevin De Bruyne", "Lionel Messi", "Cristiano Ronaldo", "Neymar Jr", "Mohamed Salah", "Son Heung-min", "Virgil van Dijk"],
   },
   {
     id: "sports-games",
